@@ -1,5 +1,6 @@
 const postsResolvers = require('./posts');
 const usersResolvers = require('./users');
+const commentsResolvers = require('./comments');
 
 //combine all of the resolvers into one file to import right here
 module.exports= {
@@ -7,6 +8,8 @@ module.exports= {
         ...postsResolvers.Query  //spread operator to grab the one query from the posts.js resolvers file
     },
     Mutation: {
-        ...usersResolvers.Mutation
+        ...usersResolvers.Mutation,
+        ...postsResolvers.Mutation,
+        ...commentsResolvers.Mutation,
     }
 }

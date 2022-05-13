@@ -52,8 +52,12 @@ module.exports = {
         {
             const {errors, valid } = validateLoginInput(username, password);
 
+            if(!valid)
+            {
+                throw new UserInputError('Errors',{errors});
+            }
             //get the user from the database because if it doesn't exist we need to return an error here
-            const user = await User.findOne({ username});
+            const user = await User.findOne({ username });
             if(!user){
                 errors.general = 'Username does not exist';
                 throw new UserInputError('Username does not exist', {errors});
@@ -71,8 +75,8 @@ module.exports = {
             const token = generateToken(user);
 
             return {
-                ...result._doc, //I don't understand what this is or what it's doing
-                id: result._id,
+                ...user._doc, //I don't understand what this is or what it's doing
+                id: user._id,
                 token
             }
         }
