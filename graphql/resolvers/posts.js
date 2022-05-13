@@ -1,7 +1,7 @@
 const Post = require('../../models/Post');
 const checkAuth = require('../../utilities/check-auth');
 
-const { AuthenticationError } = require('apollo-server');
+const { AuthenticationError, UserInputError } = require('apollo-server');
 
 module.exports = {
     //for each query or subscription it has a corresponding resolver which processes some logic and returns what the query needs
@@ -64,6 +64,30 @@ module.exports = {
             }catch(err)
             {
                 throw new Error(err);
+            }
+        },
+        async likePost(parent, {postId}, context)
+        {
+            const user = checkAuth(context);
+
+            const post = await Post.findById(postId);
+            if(post){
+                //if this if statement returns truthy, it means the user has already liked this, and need to unlike it
+                if(post.likes.find(l => l.username === username)){
+                    //just remove the one like that has the username of the user that is unliking it
+                    post.likes = post.likes.filter(like => like.username !== user.username);
+                }else {
+                    //not liked yet, so like post
+                    post.likes.push({
+                        username: user.username,
+                        createdAt: new Date().toISOString()
+                    });
+                }
+
+                await post.save();
+                return post;
+            } else {
+                throw new UserInputError('Post not found');
             }
         }
     }
