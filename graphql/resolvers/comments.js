@@ -1,6 +1,8 @@
 const { AuthenticationError, UserInputError } = require('apollo-server');
 const Post = require('../../models/Post');
+const User = require('../../models/User');
 
+const checkAuth = require('../../utilities/check-auth');
 
 module.exports = {
     Mutation: {
@@ -36,6 +38,29 @@ module.exports = {
                 throw new AuthenticationError('User is not logged in', err);
             }
            
+        },
+        async deleteComment(parent, {postId, commentId}, context) 
+        {
+            const user = checkAuth(context);
+
+            const post = await Post.findById(postId);
+            if(post){
+                //find comment in index of post's comments and then delete it
+                const commentIndex = post.comments.findIndex(c => c.id == commentId);
+
+                //if the owner of the comment is the user trying to delete it - not really necessary but more of a safty check in case a user tries to delete someone elses' comment
+                if(post.comments[commentIndex].username === user.username)
+                {
+                    post.comments.splice(commentIndex, 1);
+                    await post.save();
+                    return post;
+                }
+                else {
+                    throw new AuthenticationError('Action prohibited')
+                }
+            } else {
+                throw new UserInputError('Post not found');
+            }
         }
     }
 }
