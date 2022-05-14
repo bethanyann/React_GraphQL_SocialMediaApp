@@ -2,6 +2,7 @@ const Post = require('../../models/Post');
 const checkAuth = require('../../utilities/check-auth');
 
 const { AuthenticationError, UserInputError } = require('apollo-server');
+const { argsToArgsConfig } = require('graphql/type/definition');
 
 module.exports = {
     //for each query or subscription it has a corresponding resolver which processes some logic and returns what the query needs
@@ -33,9 +34,13 @@ module.exports = {
         async createPost(parent, { body }, context){
             //use the context to grab the authentication token and validate the user
             const user = checkAuth(context);
-            if(user)
-            {
-                console.log(user);
+            if(user) {
+                //make sure the body of the post is not empty for server validation
+                if(args.body.trim() === '')
+                {
+                    throw new Error('Cannot save an empty post.');
+                }
+
                 const newPost = new Post({
                     body,
                     user: user.id, 
@@ -73,7 +78,7 @@ module.exports = {
             const post = await Post.findById(postId);
             if(post){
                 //if this if statement returns truthy, it means the user has already liked this, and need to unlike it
-                if(post.likes.find(l => l.username === username)){
+                if(post.likes.find(like => like.username === user.username)){
                     //just remove the one like that has the username of the user that is unliking it
                     post.likes = post.likes.filter(like => like.username !== user.username);
                 }else {
