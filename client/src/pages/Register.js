@@ -1,9 +1,12 @@
 import React from 'react';
 
-export default function Register() {
+const Register = () => {
     return (
-        <div>
+        <div className="temp-margin">
             <h1> Register Page </h1>
         </div>
     );
 }
+
+
+export default Register;

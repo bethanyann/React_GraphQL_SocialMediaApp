@@ -1,9 +1,11 @@
 import React from 'react';
 
-export default function Login() {
+const Login = () => {
     return (
-        <div>
+        <div className="temp-margin">
             <h1> Login Page </h1>
         </div>
     )
 }
+
+export default Login;

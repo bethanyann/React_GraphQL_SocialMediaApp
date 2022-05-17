@@ -11,5 +11,9 @@ module.exports= {
         ...usersResolvers.Mutation,
         ...postsResolvers.Mutation,
         ...commentsResolvers.Mutation,
-    }
+    },
+    Post: {
+        likeCount: (parent) => parent.likes.length,
+        commentCount: (parent) => parent.comments.length
+    },
 }

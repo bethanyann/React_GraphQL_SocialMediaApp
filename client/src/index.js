@@ -6,20 +6,23 @@ import {
   InMemoryCache,
   ApolloProvider,
 } from "@apollo/client";
+import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const client = new ApolloClient({
   // uri: 'https://48p1r2roz4.sse.codesandbox.io',
-  uri: 'https://localhost:5000',
+  uri: 'http://localhost:5000',
   cache: new InMemoryCache()
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <ApolloProvider client={client}>
-      <App/>  
-  </ApolloProvider> 
+  <Router>
+    <ApolloProvider client={client}>
+        <App/>  
+    </ApolloProvider> 
+  </Router>
 );
 
 // If you want to start measuring performance in your app, pass a function
