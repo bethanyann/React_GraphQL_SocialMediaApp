@@ -6,7 +6,7 @@ import Register from './pages/Register';
 import Navigation from './components/Navigation';
 import './App.css';
 import { AuthProvider } from './context/auth';
-import AuthRoute from './utilities/AuthRoute';
+//import AuthRoute from './utilities/AuthRoute';
 
 export default function App() {
   return (
@@ -15,7 +15,7 @@ export default function App() {
           <Routes>
               <Route exact path='/' element={<Home />} />
               <Route exact path='login' element={<Login/>}/>
-              <Route path='register' element={<AuthRoute />} />
+              <Route path='register' element={<Register />} />
           </Routes>
         </AuthProvider>
   );
