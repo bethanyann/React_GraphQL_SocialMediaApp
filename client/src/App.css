@@ -3,6 +3,10 @@
     margin-left: 50px;
 }
 
+.bottom-margin{
+    margin-bottom: 40px;
+}
+
 .profile-photo {
     float: right;
     max-height: 50px;
@@ -13,6 +17,16 @@
     top: 0;
 }
 
-.post-body{
-      margin-top: 15px;
+.post-body {
+    margin-top: 15px;
+}
+
+.form-container {
+    width: 400px;
+    margin: auto;
+}
+
+.register-button {
+    margin-top: 20px;
+    float: right;
 }
