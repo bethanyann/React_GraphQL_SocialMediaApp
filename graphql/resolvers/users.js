@@ -14,12 +14,14 @@ module.exports = {
         async register(parent, { registerInput : {username, email, password, confirmPassword}}) {
             // validate user data
             const {valid, errors} = validateRegisterInput(username, email, password, confirmPassword);
+            console.log(errors, valid);
             if(!valid)
             {
                 throw new UserInputError('errors', { errors });
             }
             // make sure user does not already exist - think this can probably be put into the validation file in utilities? 
             const user = await User.findOne({ username });
+            debugger;
             if(user){
                 //use an apollo error here instead of just returning a generic error
                 //the payload will have an error message and an error object
