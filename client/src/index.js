@@ -5,16 +5,34 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
+  createHttpLink
 } from "@apollo/client";
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { setContext } from 'apollo-link-context';
 
+const authLink = setContext(() => {
+  //get token from local storage and add to the Authorization header
+  const token = localStorage.getItem('jwtToken');
+  return{
+    headers: {
+      Authorization: token ? `Bearer ${token}` : ' '
+    }
+  }
+})
+
+const httpLink = createHttpLink({
+  uri: 'http://localhost:5000'
+})
 const client = new ApolloClient({
   // uri: 'https://48p1r2roz4.sse.codesandbox.io',
-  uri: 'http://localhost:5000',
+ // uri: 'http://localhost:5000',
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 });
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
